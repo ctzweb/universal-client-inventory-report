@@ -63,16 +63,20 @@ UCIR is being developed as a free, open-source reporting framework for WHMCS. Th
 
 ## Current Development
 
-### Project Foundation
+### Version 0.7.0 — Foundation Release
 
-The project is currently focused on completing the documentation and release preparation required for the first public release.
+The project foundation has been completed and includes:
 
-Remaining work includes:
+- Modular reporting architecture
+- Documentation
+- GitHub repository
+- MIT License
+- Initial reporting engine
+- CSV export engine
+- Dynamic user interface
+- Configurable report fields
 
-- Architecture documentation
-- Development standards
-- Standardized source file headers
-- First public release (v0.7.0)
+The next major milestone is compatibility testing with current WHMCS releases before beginning new feature development.
 
 ---
 
@@ -92,6 +96,17 @@ Planned work includes:
 - Maintain backward compatibility whenever reasonably practical
 
 The project goal is to support as many actively maintained WHMCS versions as practical without compromising reliability or maintainability.
+
+---
+
+## Development Milestones
+
+| Version | Milestone | Status |
+|---------|-----------|--------|
+| v0.7.0 | Foundation Release | Complete |
+| v0.8.0 | Advanced Sorting | Planned |
+| v0.9.0 | Advanced Filtering | Planned |
+| v1.0.0 | Initial Stable Release | Planned |
 
 ---
 
@@ -153,7 +168,7 @@ The project goal is to support as many actively maintained WHMCS versions as pra
 
 ## Long-Term Vision
 
-UCIR may eventually grow into a modular reporting platform for WHMCS.
+UCIR is designed to evolve into a comprehensive reporting framework for WHMCS.
 
 Potential areas of future development include:
 
@@ -166,6 +181,22 @@ Potential areas of future development include:
 - Custom calculated fields
 - Role-based report access
 - Importable and exportable report profiles
+
+---
+
+## Open-Source and Community Goals
+
+UCIR will remain free and open source.
+
+Community goals include:
+
+- Public issue tracking
+- GitHub Discussions
+- Community testing
+- Documentation contributions
+- Code contributions
+- Feature suggestions
+- Voluntary project support
 
 ---
 
@@ -183,22 +214,6 @@ Future branding work may include:
 - Release graphics
 
 UCIR branding should complement the Cortez Web Services identity while remaining distinct as its own project.
-
----
-
-## Open-Source and Community Goals
-
-UCIR will remain free and open source.
-
-Community goals include:
-
-- Public issue tracking
-- GitHub Discussions
-- Community testing
-- Documentation contributions
-- Code contributions
-- Feature suggestions
-- Voluntary project support
 
 ---
 
@@ -224,14 +239,15 @@ Includes:
 
 ### v1.0.0 — Initial Stable Release
 
-The initial stable release will follow:
+The initial stable release is expected to include:
 
-- Compatibility testing
-- Installation documentation
-- Regression testing
-- License finalization
-- Source header standardization
-- Stable upgrade and release procedures
+- Compatibility with current WHMCS releases
+- Comprehensive regression testing
+- Expanded filtering capabilities
+- Advanced sorting
+- Multiple export formats
+- Improved installation and user documentation
+- Stable upgrade procedures
 
 ---
 
