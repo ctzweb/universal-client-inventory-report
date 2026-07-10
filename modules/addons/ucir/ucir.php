@@ -42,7 +42,6 @@ define(
 $ucirFiles = array(
     "config.php",
     "field_definitions.php",
-    "helpers.php",
     "html_builder.php",
     "query_clients.php",
     "query_services.php",
