@@ -2,6 +2,8 @@
 
 > A free and open-source reporting framework for WHMCS.
 
+![Universal Client Inventory Report](docs/images/ucir-readme-hero.png)
+
 *Developed by Cortez Web Services*
 
 ---
