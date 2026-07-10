@@ -1,6 +1,6 @@
 # Universal Client Inventory Report (UCIR)
 
-> A free, open-source reporting framework for WHMCS.
+> A free and open-source reporting framework for WHMCS.
 
 *Developed by Cortez Web Services*
 
@@ -141,9 +141,22 @@ The UCIR roadmap currently includes:
 
 ---
 
-# Installation
+## Installation
 
-Installation documentation will be included before the first public release.
+1. Download the latest UCIR release.
+2. Copy the `modules/addons/ucir` directory into your WHMCS installation under:
+
+   `modules/addons/`
+
+3. Verify the final installation path is:
+
+   `modules/addons/ucir/`
+
+4. Open the UCIR report from the WHMCS administrator area.
+
+5. Run the built-in database diagnostic before generating your first report.
+
+As with any third-party module, it is recommended that you back up your WHMCS installation and database before installing or upgrading.
 
 ---
 
@@ -211,9 +224,11 @@ https://cortezweb.com
 
 ---
 
-# License
+## License
 
-The project license will be finalized before Version 1.0.
+UCIR is released under the MIT License.
+
+The project is intended to remain free and open source to encourage adoption, collaboration, and community-driven improvements.
 
 ---
 
