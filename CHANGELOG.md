@@ -2,23 +2,22 @@
 
 All notable changes to the Universal Client Inventory Report (UCIR) project will be documented in this file.
 
-The format is based on the principles of *Keep a Changelog* and follows semantic versioning where practical during development.
-
 ---
 
 ## [Unreleased]
 
 ### Planned
 
-- Advanced sorting
-- Additional report filters
-- Additional export formats
-- Enhanced export options
 - WHMCS compatibility improvements
+- Advanced sorting
+- Expanded filtering
+- Additional export formats
+
+## [0.7.0] - 2026-07-10
 
 ---
 
-## [0.7.0] - Foundation Release
+## [0.7.0] - 2026-07-10
 
 ### Added
 
