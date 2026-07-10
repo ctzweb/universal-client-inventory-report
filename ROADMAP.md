@@ -63,17 +63,16 @@ UCIR is being developed as a free, open-source reporting framework for WHMCS. Th
 
 ## Current Development
 
-### Project Foundation and Documentation
+### Project Foundation
 
-- GitHub repository setup
-- README
-- Roadmap
-- Changelog
-- License
+The project is currently focused on completing the documentation and release preparation required for the first public release.
+
+Remaining work includes:
+
 - Architecture documentation
 - Development standards
 - Standardized source file headers
-- First public release preparation
+- First public release (v0.7.0)
 
 ---
 
