@@ -132,7 +132,7 @@ function ucirBuildInterface()
     echo '
 
     <link rel="stylesheet"
-    href="' . $systemUrl . '/modules/addons/ucir/assets/css/ucir.css?v=3">
+    href="' . $systemUrl . '/modules/addons/ucir/assets/css/ucir.css?v=4">
 
     <script
     src="' . $systemUrl . '/modules/addons/ucir/assets/js/ucir.js">
@@ -674,6 +674,28 @@ function ucirUpdateReportTypeDisplay(reportType)
 {
     document.getElementById('ucir_report_type').value =
         reportType;
+
+    document.querySelectorAll('.ucir-report-type')
+    .forEach(function(card){
+
+        var option =
+            card.querySelector('input[name=\"report_type\"]');
+
+        if (option && option.value === reportType) {
+
+            card.classList.add(
+                'is-selected'
+            );
+
+        } else {
+
+            card.classList.remove(
+                'is-selected'
+            );
+
+        }
+
+    });
 
     document.querySelectorAll('.ucir-filter-group')
     .forEach(function(group){
