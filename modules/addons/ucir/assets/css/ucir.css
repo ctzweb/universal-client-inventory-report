@@ -24,16 +24,127 @@
 
 
 .ucir-field-group {
-
     border: 1px solid #ddd;
     padding: 15px;
     margin-bottom: 20px;
-
 }
 
 
-
 .ucir-field-group legend {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+
+.ucir-group-controls {
+    margin-bottom: 10px;
+}
+
+
+.ucir-global-controls {
+    margin-bottom: 15px;
+}
+
+
+.checkbox {
+    margin-left: 10px;
+}
+
+
+/*
+ * UCIR Report Type Cards
+ */
+
+.ucir-report-types {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    margin-top: 15px;
+    margin-bottom: 25px;
+}
+
+
+.ucir-report-type {
+    position: relative;
+    display: block;
+    min-height: 112px;
+    padding: 18px 18px 18px 46px;
+    margin: 0;
+    border: 1px solid #d7dce1;
+    border-radius: 7px;
+    background: #fff;
+    cursor: pointer;
+    line-height: 1.5;
+    transition:
+        border-color 0.15s ease,
+        background-color 0.15s ease,
+        box-shadow 0.15s ease,
+        transform 0.15s ease;
+}
+
+
+.ucir-report-type:hover {
+    border-color: #8bb9df;
+    background: #f8fbfe;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.07);
+    transform: translateY(-1px);
+}
+
+
+.ucir-report-type:focus-within {
+    border-color: #337ab7;
+    box-shadow: 0 0 0 2px rgba(51, 122, 183, 0.18);
+    outline: none;
+}
+
+
+.ucir-report-type.is-selected {
+    border-color: #337ab7;
+    background: #f1f7fc;
+    box-shadow: 0 0 0 1px rgba(51, 122, 183, 0.12);
+}
+
+
+.ucir-report-type input {
+    position: absolute;
+    top: 20px;
+    left: 18px;
+    float: none;
+    margin: 0;
+}
+
+
+.ucir-report-type strong {
+    display: block;
+    margin-bottom: 8px;
+    color: #2f3740;
+    font-size: 15px;
+}
+
+
+.ucir-report-type small {
+    display: block;
+    margin: 0;
+    color: #555;
+    line-height: 1.45;
+}
+
+
+/*
+ * Responsive Report Type Layout
+ */
+
+@media (max-width: 900px) {
+
+    .ucir-report-types {
+        grid-template-columns: 1fr;
+    }
+
+    .ucir-report-type {
+        min-height: 0;
+    }
+
+}
 
     font-size: 16px;
     font-weight: bold;
