@@ -13,9 +13,36 @@ All notable changes to the Universal Client Inventory Report (UCIR) project will
 - Expanded filtering
 - Additional export formats
 
-## [0.7.0] - 2026-07-10
+## [1.1.0] - 2026-07-18
 
----
+### Added
+
+- Hosting recurring amount export field
+- Domain recurring amount export field
+- Hosting Annual Recurring Revenue (ARR)
+- Domain Annual Recurring Revenue (ARR)
+- Hosting projected revenue fields for:
+  - This month
+  - Next 3 months
+  - Next 6 months
+  - Next 12 months
+- Revenue projection controls in the report interface
+
+### Changed
+
+- Improved report field organization and visibility
+- Consolidated UCIR interface JavaScript into `html_builder.php`
+- Improved hosting revenue projection calculations by counting billing events within each projection period
+
+### Removed
+
+- Obsolete `assets/js/ucir.js` file
+
+### Fixed
+
+- Global Select All Fields and Clear All Fields controls
+- Section-level Select All and Select None controls
+- Monthly hosting projection values incorrectly using full ARR
 
 ## [0.7.0] - 2026-07-10
 
