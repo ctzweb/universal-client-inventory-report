@@ -16,7 +16,7 @@
  * Purpose: Retrieves domain information from WHMCS for use throughout
  *          the UCIR reporting framework.
  *
- * Version: 0.7.0
+ * Version: 1.1.0
  */
 
 
@@ -88,6 +88,10 @@ function ucirGetActiveDomains($statuses = array())
 
                 "tbldomains.nextduedate",
 
+                "tbldomains.recurringamount",
+
+                "tbldomains.registrationperiod",
+
                 "tbldomains.donotrenew",
 
                 "tblclients.status as client_status"
@@ -144,6 +148,14 @@ function ucirGetActiveDomains($statuses = array())
 
                 "next_due_date" =>
                     $domain->nextduedate,
+
+
+                "recurring_amount" =>
+                    $domain->recurringamount,
+
+
+                "registration_period" =>
+                    $domain->registrationperiod,
 
 
                 "do_not_renew" =>

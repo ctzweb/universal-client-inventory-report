@@ -16,7 +16,7 @@
  * Purpose: Builds and renders the UCIR user interface, including report
  *          options, filters, field selection, and validation messages.
  *
- * Version: 0.7.0
+ * Version: 1.1.0
  */
 
 
@@ -133,10 +133,6 @@ function ucirBuildInterface()
 
     <link rel="stylesheet"
     href="' . $systemUrl . '/modules/addons/ucir/assets/css/ucir.css?v=4">
-
-    <script
-    src="' . $systemUrl . '/modules/addons/ucir/assets/js/ucir.js">
-    </script>
 
     ';
 
@@ -545,12 +541,40 @@ $html = "
 
 
 
+        $projectionFields = array();
+        $standardFields = array();
+
+
         foreach ($categoryFields as $field) {
 
 
+            if (
+                ($category === "Hosting Information" || $category === "Domain Information")
+                && strpos($field["id"], "_projection_") !== false
+            ) {
+
+
+                $projectionFields[] =
+                    $field;
+
+
+            } else {
+
+
+                $standardFields[] =
+                    $field;
+
+
+            }
+
+
+        }
+
+
+        foreach ($standardFields as $field) {
+
 
             $checked = "";
-
 
 
             if (!empty($field["default"])) {
@@ -561,7 +585,6 @@ $html = "
 
 
             }
-
 
 
             $html .= "
@@ -592,6 +615,154 @@ $html = "
 
 
                 </label>
+
+
+            </div>
+
+
+            ";
+
+
+        }
+
+
+        if (!empty($projectionFields)) {
+
+
+            $projectionGroupKey =
+                ($category === "Hosting Information")
+                ? "hosting"
+                : "domain";
+
+
+            $html .= "
+
+
+            <div class='checkbox ucir-projection-parent'>
+
+
+                <label>
+
+
+                    <input
+
+                        type='checkbox'
+
+                        class='ucir-projection-toggle'
+
+                        data-projection-group='" . htmlspecialchars($projectionGroupKey) . "'
+
+                    >
+
+
+                    Projected Revenue
+
+
+                </label>
+
+
+            </div>
+
+
+            <div
+                class='ucir-projection-children'
+                data-projection-children='" . htmlspecialchars($projectionGroupKey) . "'
+                style='overflow:hidden; max-height:0; opacity:0; margin-top:0; margin-left:28px; pointer-events:none; transition:max-height 180ms ease, opacity 180ms ease, margin-top 180ms ease;'
+            >
+
+
+            ";
+
+
+            $projectionLabels = array(
+                "this_month" => "This Month",
+                "next_3_months" => "Next 3 Months",
+                "next_6_months" => "Next 6 Months",
+                "next_12_months" => "Next 12 Months"
+            );
+
+
+            foreach ($projectionFields as $field) {
+
+
+                $checked = "";
+
+
+                if (!empty($field["default"])) {
+
+
+                    $checked =
+                        "checked";
+
+
+                }
+
+
+                $childLabel =
+                    $field["label"];
+
+
+                foreach ($projectionLabels as $suffix => $shortLabel) {
+
+
+                    if (substr($field["id"], -strlen($suffix)) === $suffix) {
+
+
+                        $childLabel =
+                            $shortLabel;
+
+
+                        break;
+
+
+                    }
+
+
+                }
+
+
+                $html .= "
+
+
+                <div class='checkbox ucir-projection-child'>
+
+
+                    <label>
+
+
+                        <input
+
+                            type='checkbox'
+
+                            class='ucir-field {$categoryId} ucir-projection-field'
+
+                            name='ucir_fields[]'
+
+                            value='" . htmlspecialchars($field["id"]) . "'
+
+                            data-projection-group='" . htmlspecialchars($projectionGroupKey) . "'
+
+                            {$checked}
+
+                        >
+
+
+                        " . htmlspecialchars($childLabel) . "
+
+
+                    </label>
+
+
+                </div>
+
+
+                ";
+
+
+            }
+
+
+            $html .= "
 
 
             </div>
@@ -670,134 +841,409 @@ $html .= "
 
 <script>
 
-function ucirUpdateReportTypeDisplay(reportType)
-{
-    document.getElementById('ucir_report_type').value =
-        reportType;
+(function(){
 
-    document.querySelectorAll('.ucir-report-type')
-    .forEach(function(card){
+    'use strict';
 
-        var option =
-            card.querySelector('input[name=\"report_type\"]');
 
-        if (option && option.value === reportType) {
-
-            card.classList.add(
-                'is-selected'
+    function ucirGetReportType()
+    {
+        var selected =
+            document.querySelector(
+                'input[name=\"report_type\"]:checked'
             );
 
-        } else {
+        return selected
+            ? selected.value
+            : 'inventory';
+    }
 
-            card.classList.remove(
-                'is-selected'
+
+    function ucirSetGroupAvailability(group, isVisible)
+    {
+        group.style.display =
+            isVisible ? '' : 'none';
+
+        group.querySelectorAll(
+            'input, select, textarea, button'
+        )
+        .forEach(function(control){
+
+            control.disabled =
+                !isVisible;
+
+        });
+    }
+
+
+    function ucirUpdateReportTypeDisplay(reportType)
+    {
+        var hiddenReportType =
+            document.getElementById(
+                'ucir_report_type'
             );
 
+        if (hiddenReportType) {
+            hiddenReportType.value =
+                reportType;
         }
 
-    });
+        document.querySelectorAll(
+            '.ucir-report-type'
+        )
+        .forEach(function(card){
 
-    document.querySelectorAll('.ucir-filter-group')
-    .forEach(function(group){
+            var option =
+                card.querySelector(
+                    'input[name=\"report_type\"]'
+                );
 
-        var allowedTypes =
-            group.getAttribute('data-report-types') || '';
+            card.classList.toggle(
+                'is-selected',
+                Boolean(
+                    option &&
+                    option.value === reportType
+                )
+            );
+        });
 
-        if (allowedTypes.split(' ').indexOf(reportType) !== -1) {
+        document.querySelectorAll(
+            '.ucir-filter-group, .ucir-report-field-group'
+        )
+        .forEach(function(group){
 
-            group.style.display =
-                '';
+            var allowedTypes =
+                group.getAttribute(
+                    'data-report-types'
+                ) || '';
 
-            group.querySelectorAll('input, select, textarea, button')
-            .forEach(function(control){
+            var isVisible =
+                allowedTypes
+                .split(/\\s+/)
+                .indexOf(reportType) !== -1;
 
-                control.disabled =
-                    false;
+            ucirSetGroupAvailability(
+                group,
+                isVisible
+            );
+        });
 
-            });
+        ucirRefreshProjectionGroups();
+    }
+
+
+    function ucirGetProjectionContainer(groupKey)
+    {
+        return document.querySelector(
+            '.ucir-projection-children' +
+            '[data-projection-children=\"' +
+            groupKey +
+            '\"]'
+        );
+    }
+
+
+    function ucirUpdateProjectionGroup(toggle, clearChildren)
+    {
+        var groupKey =
+            toggle.getAttribute(
+                'data-projection-group'
+            );
+
+        var childContainer =
+            ucirGetProjectionContainer(
+                groupKey
+            );
+
+        if (!childContainer) {
+            return;
+        }
+
+        if (toggle.checked) {
+
+            childContainer.style.pointerEvents =
+                'auto';
+
+            childContainer.style.marginTop =
+                '4px';
+
+            childContainer.style.opacity =
+                '1';
+
+            childContainer.style.maxHeight =
+                childContainer.scrollHeight + 'px';
 
         } else {
 
-            group.style.display =
+            childContainer.style.maxHeight =
+                '0';
+
+            childContainer.style.opacity =
+                '0';
+
+            childContainer.style.marginTop =
+                '0';
+
+            childContainer.style.pointerEvents =
                 'none';
 
-            group.querySelectorAll('input, select, textarea, button')
-            .forEach(function(control){
+            if (clearChildren) {
 
-                control.disabled =
-                    true;
+                childContainer.querySelectorAll(
+                    '.ucir-projection-field'
+                )
+                .forEach(function(child){
 
-            });
+                    child.checked =
+                        false;
 
+                });
+            }
         }
-
-    });
-
-
-    document.querySelectorAll('.ucir-report-field-group')
-    .forEach(function(group){
-
-        var allowedTypes =
-            group.getAttribute('data-report-types') || '';
-
-        if (allowedTypes.split(' ').indexOf(reportType) !== -1) {
-
-            group.style.display =
-                '';
-
-            group.querySelectorAll('input, select, textarea, button')
-            .forEach(function(control){
-
-                control.disabled =
-                    false;
-
-            });
-
-        } else {
-
-            group.style.display =
-                'none';
-
-            group.querySelectorAll('input, select, textarea, button')
-            .forEach(function(control){
-
-                control.disabled =
-                    true;
-
-            });
-
-        }
-
-    });
-}
+    }
 
 
-document.querySelectorAll('input[name=\"report_type\"]')
-.forEach(function(option){
+    function ucirSyncProjectionGroup(toggle)
+    {
+        var groupKey =
+            toggle.getAttribute(
+                'data-projection-group'
+            );
 
-    option.addEventListener('change', function(){
+        var checkedChild =
+            document.querySelector(
+                '.ucir-projection-field' +
+                '[data-projection-group=\"' +
+                groupKey +
+                '\"]:checked:not(:disabled)'
+            );
+
+        toggle.checked =
+            Boolean(checkedChild);
+
+        ucirUpdateProjectionGroup(
+            toggle,
+            false
+        );
+    }
+
+
+    function ucirRefreshProjectionGroups()
+    {
+        document.querySelectorAll(
+            '.ucir-projection-toggle'
+        )
+        .forEach(function(toggle){
+
+            ucirSyncProjectionGroup(
+                toggle
+            );
+
+        });
+    }
+
+
+    function ucirSetCheckboxes(selector, checked)
+    {
+        document.querySelectorAll(selector)
+        .forEach(function(field){
+
+            if (!field.disabled) {
+                field.checked =
+                    checked;
+            }
+        });
+
+        ucirRefreshProjectionGroups();
+    }
+
+
+    function ucirInitReportTypes()
+    {
+        document.querySelectorAll(
+            'input[name=\"report_type\"]'
+        )
+        .forEach(function(option){
+
+            option.addEventListener(
+                'change',
+                function(){
+
+                    ucirUpdateReportTypeDisplay(
+                        this.value
+                    );
+
+                }
+            );
+        });
 
         ucirUpdateReportTypeDisplay(
-            this.value
+            ucirGetReportType()
+        );
+    }
+
+
+    function ucirInitGlobalSelection()
+    {
+        var selectAll =
+            document.getElementById(
+                'ucir-select-all'
+            );
+
+        var clearAll =
+            document.getElementById(
+                'ucir-clear-all'
+            );
+
+        if (selectAll) {
+            selectAll.addEventListener(
+                'click',
+                function(){
+
+                    ucirSetCheckboxes(
+                        '.ucir-report-field-group ' +
+                        'input.ucir-field',
+                        true
+                    );
+
+                }
+            );
+        }
+
+        if (clearAll) {
+            clearAll.addEventListener(
+                'click',
+                function(){
+
+                    ucirSetCheckboxes(
+                        '.ucir-report-field-group ' +
+                        'input.ucir-field',
+                        false
+                    );
+
+                }
+            );
+        }
+    }
+
+
+    function ucirInitGroupSelection()
+    {
+        document.querySelectorAll(
+            '.ucir-group-select, .ucir-group-clear'
+        )
+        .forEach(function(button){
+
+            button.addEventListener(
+                'click',
+                function(){
+
+                    var targetClass =
+                        this.getAttribute(
+                            'data-target'
+                        );
+
+                    if (!targetClass) {
+                        return;
+                    }
+
+                    var shouldCheck =
+                        this.classList.contains(
+                            'ucir-group-select'
+                        );
+
+                    ucirSetCheckboxes(
+                        'input.' + targetClass,
+                        shouldCheck
+                    );
+
+                }
+            );
+        });
+    }
+
+
+    function ucirInitProjectionGroups()
+    {
+        document.querySelectorAll(
+            '.ucir-projection-toggle'
+        )
+        .forEach(function(toggle){
+
+            toggle.addEventListener(
+                'change',
+                function(){
+
+                    ucirUpdateProjectionGroup(
+                        this,
+                        true
+                    );
+
+                }
+            );
+        });
+
+        document.querySelectorAll(
+            '.ucir-projection-field'
+        )
+        .forEach(function(child){
+
+            child.addEventListener(
+                'change',
+                function(){
+
+                    var groupKey =
+                        this.getAttribute(
+                            'data-projection-group'
+                        );
+
+                    var toggle =
+                        document.querySelector(
+                            '.ucir-projection-toggle' +
+                            '[data-projection-group=\"' +
+                            groupKey +
+                            '\"]'
+                        );
+
+                    if (toggle) {
+                        ucirSyncProjectionGroup(
+                            toggle
+                        );
+                    }
+                }
+            );
+        });
+
+        ucirRefreshProjectionGroups();
+    }
+
+
+    function ucirInit()
+    {
+        ucirInitProjectionGroups();
+        ucirInitGlobalSelection();
+        ucirInitGroupSelection();
+        ucirInitReportTypes();
+    }
+
+
+    if (document.readyState === 'loading') {
+
+        document.addEventListener(
+            'DOMContentLoaded',
+            ucirInit
         );
 
-    });
+    } else {
 
-});
+        ucirInit();
 
+    }
 
-var selectedReportType =
-    document.querySelector('input[name=\"report_type\"]:checked');
-
-if (selectedReportType) {
-
-    ucirUpdateReportTypeDisplay(
-        selectedReportType.value
-    );
-
-}
+})();
 
 </script>
+
 
 ";
 

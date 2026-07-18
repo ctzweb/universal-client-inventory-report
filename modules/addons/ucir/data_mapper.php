@@ -16,12 +16,14 @@
  * Purpose: Converts raw WHMCS data into standardized records for use
  *          throughout the UCIR reporting framework.
  *
- * Version: 0.7.0
+ * Version: 1.1.0
  */
 
 if (!defined("WHMCS")) {
     die("This file cannot be accessed directly");
 }
+
+require_once __DIR__ . "/revenue_helper.php";
 
 /**
  * Create Client Lookup
@@ -224,6 +226,11 @@ function ucirMapServices($hostingStatuses = array())
             $client = $clients[$service["client_id"]];
         }
 
+        $serviceArr = ucirCalculateHostingARR(
+            $service["amount"],
+            $service["billing_cycle"]
+        );
+
         $records[] = array(
 
             "inventory_type" =>
@@ -273,7 +280,62 @@ function ucirMapServices($hostingStatuses = array())
                 $service["billing_cycle"],
 
             "amount" =>
-                $service["amount"],
+                ucirFormatCurrencyAmount(
+                    $service["amount"]
+                ),
+
+            "service_arr" =>
+                ucirFormatCurrencyAmount(
+                    $serviceArr
+                ),
+
+            "service_projected_revenue_this_month" =>
+                ucirFormatCurrencyAmount(
+                    ucirCalculateProjectedRevenue(
+                        $service["amount"],
+                        ucirGetHostingRenewalIntervalMonths(
+                            $service["billing_cycle"]
+                        ),
+                        $service["next_due_date"],
+                        UCIR_WINDOW_THIS_MONTH
+                    )
+                ),
+
+            "service_projected_revenue_next_3_months" =>
+                ucirFormatCurrencyAmount(
+                    ucirCalculateProjectedRevenue(
+                        $service["amount"],
+                        ucirGetHostingRenewalIntervalMonths(
+                            $service["billing_cycle"]
+                        ),
+                        $service["next_due_date"],
+                        UCIR_WINDOW_NEXT_3_MONTHS
+                    )
+                ),
+
+            "service_projected_revenue_next_6_months" =>
+                ucirFormatCurrencyAmount(
+                    ucirCalculateProjectedRevenue(
+                        $service["amount"],
+                        ucirGetHostingRenewalIntervalMonths(
+                            $service["billing_cycle"]
+                        ),
+                        $service["next_due_date"],
+                        UCIR_WINDOW_NEXT_6_MONTHS
+                    )
+                ),
+
+            "service_projected_revenue_next_12_months" =>
+                ucirFormatCurrencyAmount(
+                    ucirCalculateProjectedRevenue(
+                        $service["amount"],
+                        ucirGetHostingRenewalIntervalMonths(
+                            $service["billing_cycle"]
+                        ),
+                        $service["next_due_date"],
+                        UCIR_WINDOW_NEXT_12_MONTHS
+                    )
+                ),
 
             "registration_date" =>
                 $service["registration_date"],
@@ -310,6 +372,11 @@ function ucirMapDomains($domainStatuses = array())
         if (isset($clients[$domain["client_id"]])) {
             $client = $clients[$domain["client_id"]];
         }
+
+        $domainArr = ucirCalculateDomainARR(
+            $domain["recurring_amount"],
+            $domain["registration_period"]
+        );
 
         $records[] = array(
 
@@ -348,6 +415,55 @@ function ucirMapDomains($domainStatuses = array())
 
             "next_due_date" =>
                 $domain["next_due_date"],
+
+            "domain_recurring_amount" =>
+                ucirFormatCurrencyAmount(
+                    $domain["recurring_amount"]
+                ),
+
+            "domain_registration_period" =>
+                $domain["registration_period"],
+
+            "domain_arr" =>
+                ucirFormatCurrencyAmount(
+                    $domainArr
+                ),
+
+            "domain_projected_revenue_this_month" =>
+                ucirFormatCurrencyAmount(
+                    ucirCalculateDomainProjectedARR(
+                        $domainArr,
+                        $domain["next_due_date"],
+                        UCIR_WINDOW_THIS_MONTH
+                    )
+                ),
+
+            "domain_projected_revenue_next_3_months" =>
+                ucirFormatCurrencyAmount(
+                    ucirCalculateDomainProjectedARR(
+                        $domainArr,
+                        $domain["next_due_date"],
+                        UCIR_WINDOW_NEXT_3_MONTHS
+                    )
+                ),
+
+            "domain_projected_revenue_next_6_months" =>
+                ucirFormatCurrencyAmount(
+                    ucirCalculateDomainProjectedARR(
+                        $domainArr,
+                        $domain["next_due_date"],
+                        UCIR_WINDOW_NEXT_6_MONTHS
+                    )
+                ),
+
+            "domain_projected_revenue_next_12_months" =>
+                ucirFormatCurrencyAmount(
+                    ucirCalculateDomainProjectedARR(
+                        $domainArr,
+                        $domain["next_due_date"],
+                        UCIR_WINDOW_NEXT_12_MONTHS
+                    )
+                ),
 
             "domain_status" =>
                 $domain["status"]

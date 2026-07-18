@@ -16,7 +16,7 @@
  * Purpose: Retrieves hosting service information from WHMCS for use
  *          throughout the UCIR reporting framework.
  *
- * Version: 0.7.0
+ * Version: 1.1.0
  */
 
 

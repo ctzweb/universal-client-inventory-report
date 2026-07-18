@@ -15,7 +15,7 @@
  * Purpose: Defines the visual presentation and layout of the UCIR user
  *          interface.
  *
- * Version: 0.7.0
+ * Version: 1.1.0
  */
 
 .ucir-container {
@@ -144,65 +144,4 @@
         min-height: 0;
     }
 
-}
-
-    font-size: 16px;
-    font-weight: bold;
-
-}
-
-
-
-.ucir-group-controls {
-
-    margin-bottom: 10px;
-
-}
-
-
-
-.ucir-global-controls {
-
-    margin-bottom: 15px;
-
-}
-
-
-.checkbox {
-
-    margin-left: 10px;
-
-}
-
-/* UCIR Report Type Styling */
-
-.ucir-report-types {
-    margin-top: 15px;
-    margin-bottom: 25px;
-}
-
-.ucir-report-type {
-    display: block;
-    padding: 15px;
-    margin-bottom: 15px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    cursor: pointer;
-    line-height: 1.5;
-}
-
-.ucir-report-type input {
-    float: left;
-    margin: 5px 10px 0 0;
-}
-
-.ucir-report-type strong {
-    display: block;
-    margin-bottom: 6px;
-}
-
-.ucir-report-type small {
-    display: block;
-    margin-left: 25px;
-    line-height: 1.4;
 }
